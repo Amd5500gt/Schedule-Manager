@@ -669,47 +669,27 @@ body.theme-dark .analytics-card {
     height: 300px !important;
 }
 
-/* Responsive Styles */
-@media (max-width: 1200px) {
+@media only screen and (max-width: 1200px),
+       only screen and (max-width: 768px),
+       only screen and (max-width: 480px) {
     .dashboard {
-        grid-template-columns: 1fr;
+        grid-template-columns: 300px 1fr !important;
     }
-}
 
-@media (max-width: 768px) {
-    .toolbar {
-        flex-direction: column;
-    }
-    
-    button {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    .tabs {
-        overflow-x: auto;
-        white-space: nowrap;
-        padding-bottom: 5px;
-    }
-    
-    table {
-        display: block;
-        overflow-x: auto;
-    }
-    
-    .export-options {
-        grid-template-columns: 1fr;
-    }
-    
+    .toolbar,
+    .analytics-container,
+    .export-options,
     .calendar-view {
-        grid-template-columns: 1fr;
+        flex-direction: row !important;
+        grid-template-columns: auto auto auto auto !important;
     }
-    
-    .analytics-container {
-        grid-template-columns: 1fr;
+
+    button {
+        width: auto !important;
+        justify-content: flex-start !important;
     }
-    
-    .analytics-card canvas {
-        height: 250px !important;
+
+    table {
+        display: table !important;
     }
 }
