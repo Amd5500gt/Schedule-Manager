@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Schedule Manager</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+    
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><i class="fas fa-calendar-alt"></i> Academic Schedule Manager</h1>
+            <p class="subtitle">Organize your academic schedule with powerful tools and analytics</p>
+        </header>
+        
+        <div class="dashboard">
+            <div class="sidebar">
+                <div class="stats-card">
+                    <h3><i class="fas fa-chart-pie"></i> Statistics</h3>
+                    <div class="stat-item">
+                        <span>Total Classes</span>
+                        <span class="stat-value" id="totalClasses">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Upcoming</span>
+                        <span class="stat-value" id="upcomingClasses">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>This Week</span>
+                        <span class="stat-value" id="weekClasses">0</span>
+                    </div>
+                    <div class="stat-item">
+                        <span>Completed</span>
+                        <span class="stat-value" id="completedClasses">0</span>
+                    </div>
+                </div>
+                
+                <div class="stats-card">
+                    <h3><i class="fas fa-calendar-week"></i> This Week</h3>
+                    <div id="weeklyCalendar" class="calendar-view">
+                        <!-- Dynamically generated calendar -->
+                    </div>
+                </div>
+            </div>
+            
+            <div class="main-content">
+                <div class="toolbar">
+                    <button id="addRow"><i class="fas fa-plus"></i> Add Class</button>
+                    <button id="exportData" class="secondary"><i class="fas fa-file-export"></i> Export</button>
+                    <div class="file-input-wrapper">
+                        <button id="loadData" class="secondary"><i class="fas fa-file-import"></i> Import</button>
+                        <input type="file" id="fileInput" accept=".json,.csv">
+                    </div>
+                    <button id="repeatAction" class="success"><i class="fas fa-redo"></i> Repeat</button>
+                    <button id="syncData" class="secondary"><i class="fas fa-sync-alt"></i> Sync</button>
+                    <button id="settingsBtn" class="secondary"><i class="fas fa-cog"></i> Settings</button>
+                </div>
+                
+                <div id="statusMessage" class="status-message"></div>
+                
+                <div class="tab-container">
+                    <div class="tabs">
+                        <div class="tab active" data-tab="semester1">Semester 1</div>
+                        <div class="tab" data-tab="semester2">Semester 2</div>
+                        <div class="tab" data-tab="semester3">Semester 3</div>
+                        <div class="tab" data-tab="semester4">Semester 4</div>
+                        <div class="tab" data-tab="calendar">Calendar View</div>
+                        <div class="tab" data-tab="analytics">Analytics</div>
+                    </div>
+                    
+                    <div id="semester1" class="tab-content active">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>Subject Code</th>
+                                    <th>Subject Name</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="datetime-local"></td>
+                                    <td><input type="text" placeholder="CS101"></td>
+                                    <td><input type="text" placeholder="Introduction to Programming"></td>
+                                    <td>
+                                        <select>
+                                            <option value="lecture">Lecture</option>
+                                            <option value="lab">Lab</option>
+                                            <option value="seminar">Seminar</option>
+                                            <option value="workshop">Workshop</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select>
+                                            <option value="scheduled">Scheduled</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="action-btn repeat-btn" title="Repeat this entry"><i class="fas fa-copy"></i></button>
+                                        <button class="action-btn delete-btn warning" title="Delete this row"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="semester2" class="tab-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>Subject Code</th>
+                                    <th>Subject Name</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="datetime-local"></td>
+                                    <td><input type="text" placeholder="CS102"></td>
+                                    <td><input type="text" placeholder="Data Structures"></td>
+                                    <td>
+                                        <select>
+                                            <option value="lecture">Lecture</option>
+                                            <option value="lab">Lab</option>
+                                            <option value="seminar">Seminar</option>
+                                            <option value="workshop">Workshop</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select>
+                                            <option value="scheduled">Scheduled</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="action-btn repeat-btn" title="Repeat this entry"><i class="fas fa-copy"></i></button>
+                                        <button class="action-btn delete-btn warning" title="Delete this row"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="semester3" class="tab-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>Subject Code</th>
+                                    <th>Subject Name</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="datetime-local"></td>
+                                    <td><input type="text" placeholder="CS201"></td>
+                                    <td><input type="text" placeholder="Algorithms"></td>
+                                    <td>
+                                        <select>
+                                            <option value="lecture">Lecture</option>
+                                            <option value="lab">Lab</option>
+                                            <option value="seminar">Seminar</option>
+                                            <option value="workshop">Workshop</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select>
+                                            <option value="scheduled">Scheduled</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="action-btn repeat-btn" title="Repeat this entry"><i class="fas fa-copy"></i></button>
+                                        <button class="action-btn delete-btn warning" title="Delete this row"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="semester4" class="tab-content">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Date & Time</th>
+                                    <th>Subject Code</th>
+                                    <th>Subject Name</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="datetime-local"></td>
+                                    <td><input type="text" placeholder="CS202"></td>
+                                    <td><input type="text" placeholder="Database Systems"></td>
+                                    <td>
+                                        <select>
+                                            <option value="lecture">Lecture</option>
+                                            <option value="lab">Lab</option>
+                                            <option value="seminar">Seminar</option>
+                                            <option value="workshop">Workshop</option>
+                                        </select>
+                                    </td>
+                                    <td>
+                                        <select>
+                                            <option value="scheduled">Scheduled</option>
+                                            <option value="completed">Completed</option>
+                                            <option value="cancelled">Cancelled</option>
+                                        </select>
+                                    </td>
+                                    <td class="actions">
+                                        <button class="action-btn repeat-btn" title="Repeat this entry"><i class="fas fa-copy"></i></button>
+                                        <button class="action-btn delete-btn warning" title="Delete this row"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <div id="calendar" class="tab-content">
+                        <div class="calendar-view" id="monthlyCalendar">
+                            <!-- Monthly calendar will be generated here -->
+                        </div>
+                    </div>
+                    
+                    <div id="analytics" class="tab-content">
+                        <div class="analytics-container">
+                            <div class="analytics-card">
+                                <h3><i class="fas fa-chart-bar"></i> Class Distribution</h3>
+                                <canvas id="classTypeChart"></canvas>
+                            </div>
+                            <div class="analytics-card">
+                                <h3><i class="fas fa-chart-line"></i> Weekly Pattern</h3>
+                                <canvas id="weeklyPatternChart"></canvas>
+                            </div>
+                            <div class="analytics-card">
+                                <h3><i class="fas fa-clock"></i> Time Utilization</h3>
+                                <canvas id="timeUtilizationChart"></canvas>
+                            </div>
+                            <div class="analytics-card">
+                                <h3><i class="fas fa-tasks"></i> Completion Rate</h3>
+                                <canvas id="completionChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Export Modal -->
+    <div id="exportModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-file-export"></i> Export Options</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="export-options">
+                <div class="export-option" data-export="png">
+                    <i class="fas fa-image"></i>
+                    <h4>Save as Image</h4>
+                    <p>Export current view as PNG image</p>
+                </div>
+                <div class="export-option" data-export="pdf">
+                    <i class="fas fa-file-pdf"></i>
+                    <h4>Save as PDF</h4>
+                    <p>Export schedule as printable PDF</p>
+                </div>
+                <div class="export-option" data-export="json">
+                    <i class="fas fa-file-code"></i>
+                    <h4>Save as JSON</h4>
+                    <p>Export data for backup or transfer</p>
+                </div>
+                <div class="export-option" data-export="csv">
+                    <i class="fas fa-file-csv"></i>
+                    <h4>Save as CSV</h4>
+                    <p>Export for spreadsheet applications</p>
+                </div>
+                <div class="export-option" data-export="ical">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h4>Save as iCal</h4>
+                    <p>Export for calendar applications</p>
+                </div>
+                <div class="export-option" data-export="print">
+                    <i class="fas fa-print"></i>
+                    <h4>Print Schedule</h4>
+                    <p>Open print-friendly version</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-cog"></i> Application Settings</h3>
+                <button class="close-modal">&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="themeSelect">Color Theme</label>
+                <select id="themeSelect" class="form-control">
+                    <option value="default">Default Blue</option>
+                    <option value="green">Emerald Green</option>
+                    <option value="purple">Royal Purple</option>
+                    <option value="dark">Midnight Dark</option>
+                    <option value="red">Ruby Red</option>
+                    <option value="teal">Ocean Teal</option>
+                    <option value="orange">Sunset Orange</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="timeFormat">Time Format</label>
+                <select id="timeFormat" class="form-control">
+                    <option value="24">24-hour format</option>
+                    <option value="12">12-hour format</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="firstDayOfWeek">First Day of Week</label>
+                <select id="firstDayOfWeek" class="form-control">
+                    <option value="0">Sunday</option>
+                    <option value="1">Monday</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="notifications">Enable Notifications</label>
+                <input type="checkbox" id="notifications" checked>
+            </div>
+            <div class="form-group">
+                <label for="defaultClassType">Default Class Type</label>
+                <select id="defaultClassType" class="form-control">
+                    <option value="lecture">Lecture</option>
+                    <option value="lab">Lab</option>
+                    <option value="seminar">Seminar</option>
+                    <option value="workshop">Workshop</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button class="secondary" id="cancelSettings">Cancel</button>
+                <button id="saveSettings">Save Settings</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>
