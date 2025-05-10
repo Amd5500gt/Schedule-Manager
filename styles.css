@@ -587,7 +587,7 @@ body.theme-dark .export-option p {
 }
 
 .calendar-day {
-    background: rgb(204, 204, 197);
+    background: rgb(243, 240, 240);
     border-radius: var(--border-radius);
     padding: 6px;
     min-height: 100px;
